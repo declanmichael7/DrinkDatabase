@@ -1,2 +1,3 @@
-var drinkArray = [];
-drinkArray.push({drinkName:"Moscow Mule", ingredients:["vodka","lime juice","Ginger beer"], special:"none"});
+var drinkArray = [{drinkName:"Moscow Mule", ingredients:["1.5oz Vodka"," 0.75oz lime juice "," Splash of ginger beer"], special:"none"}, 
+	              {drinkName:"Dark and Stormy", ingredients:[" 1.5oz Dark Rum"," 0.75oz lime juice"," Splash of ginger beer"], special:"none"},
+				  {drinkName:"Mojito", ingredients:["1.5oz Rum"," 0.75oz lime juice"," 1 spoon of sugar"," mint"," Splash of seltzer"], special:"Muddle the mint and the sugar, then pour in the rest and stir"}];

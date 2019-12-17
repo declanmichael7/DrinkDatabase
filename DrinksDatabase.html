@@ -2,14 +2,18 @@
 <head>
 <body>
 	<br>
-	Competitor Number: <input type="text" id="compNum"></input><br><br>
-	Email Address: <input type="text" id="email"></input><br><br>
-	<button onClick="displayResults()">Display Results</button><br><br>
+	Drink Name: <input type="text" id="drinkName"></input><br><br>
+	Ingredient: <input type="text" id="ingredient"></input><br><br>
+	Search By: <select id="searchBy">
+		<option value="drinkName">Drink Name</option>
+		<option value="ingredient">Ingredient</option>
+	</select><br><br>
+	<button onClick="displayDrinks()">Display Drinks</button><br><br>
 	<table id="drinks">
 		<tr>
 			<th>Drink Name</th>
 			<th>Ingredients</th>
-			<th>Special Instructions</th>
+			<th>Notes</th>
 		</tr>
 	</table>
 	<style>
@@ -41,44 +45,53 @@
 		border: 2px solid green;
 	}
 	</style>
-	<script src="https://cdn.jsdelivr.net/gh/declanmichael7/DrinkDatabase/testArray.js?token=AHREPBBXXLQSHMV36R2HDN26AJ34Y"></script>
-	<script type="text/javascript">
-		alert(drinkArray[0].drinkName);
-		
+	<script src="https://cdn.jsdelivr.net/gh/declanmichael7/DrinkDatabase/drinkArray.js?token=AHREPBBXXLQSHMV36R2HDN26AJ34Y"></script>
+	<script type="text/javascript">		
+		var i;
+		var searchBy = document.getElementById("searchBy").value;
+		var table = document.getElementById("drinks");
 		function displayDrinks(){
-			/*var compNum = document.getElementById("compNum").value;
-			var email = document.getElementById("email").value;
-			var match = false;
-			var i=0;
-			while(i<=emailList.length-1 && match==false){
-				console.log(i + "  " + emailList.length);
-				console.log(emailList[i]);
-				if(compNum==emailList[i][0] && email.toLowerCase()==emailList[i][1].toLowerCase()){
-					match = true;
-				}
-				i++;
-			}
-			console.log(match);
-			if(match==true){
-				var table = document.getElementById("results");
-				table.innerHTML = "";
-				var tableHTML = "<table id='results'<tr><th>Competitor Number</th><th>Competition Number</th><th>1st</th><th>2nd</th><th>3rd</th><th>Competitor's Score</th><th>Comments</th></tr></table>";
-				i = 0;
-				while (i < results.length) {
-					if(results[i][0]==compNum){
-						tableHTML += "<tr><td>" + results[i][0] + "</td><td>" + results[i][1] + "</td><td>" + results[i][2] + "</td><td>" + results[i][3] + "</td><td>" + results[i][4] + "</td><td>" + results[i][5] + "</td><td>" + results[i][6] + "</td></tr> ";
+			table.innerHTML = "";
+			var tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th></tr></table>";
+			searchBy = document.getElementById("searchBy").value;
+			if(searchBy == "drinkName"){
+				var drinkName = document.getElementById("drinkName").value.toLowerCase();
+				i=0;
+				var match = false;
+				while(i<drinkArray.length && match==false){
+					if(drinkName == drinkArray[i].drinkName.toLowerCase()){
+						tableHTML+="<tr><td>" + drinkArray[i].drinkName + "</td><td>" + drinkArray[i].ingredients + "</td><td>" + drinkArray[i].special + "</td></tr></table>";
+						match=true;
 					}
 					i++;
 				}
-				tableHTML += "</table>";
 				table.innerHTML = tableHTML;
-				console.log("test");
 			}
 			else{
-				alert("There is not a competitor number associated with that email. Please verify that you entered your data correctly");
-				document.getElementById("results").innerHTML = "";
-			}*/
+				var ingredient = document.getElementById("ingredient").value.toLowerCase();
+				i=0;
+				while(i<drinkArray.length){
+					var j=0;
+					while(j<drinkArray[i].ingredients.length){
+						if(drinkArray[i].ingredients[j].toLowerCase().includes(ingredient)){
+							tableHTML+="<tr><td>" + drinkArray[i].drinkName + "</td><td>" + drinkArray[i].ingredients + "</td><td>" + drinkArray[i].special + "</td></tr>"
+						}
+						j++;
+					}
+					i++;
+				}
+				table.innerHTML = tableHTML;
+			}
 		}
+		table.innerHTML = "";
+		var tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th></tr>";
+		i=0;
+		while(i<drinkArray.length){
+			tableHTML+="<tr><td>" + drinkArray[i].drinkName + "</td><td>" + drinkArray[i].ingredients + "</td><td>" + drinkArray[i].special + "</td></tr>";
+			i++;
+		}
+		tableHTML+="</table>";
+		table.innerHTML = tableHTML;
 	</script>
 </body>
 </html>
