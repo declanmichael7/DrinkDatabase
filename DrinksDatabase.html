@@ -1,0 +1,84 @@
+<html>
+<head>
+<body>
+	<br>
+	Competitor Number: <input type="text" id="compNum"></input><br><br>
+	Email Address: <input type="text" id="email"></input><br><br>
+	<button onClick="displayResults()">Display Results</button><br><br>
+	<table id="drinks">
+		<tr>
+			<th>Drink Name</th>
+			<th>Ingredients</th>
+			<th>Special Instructions</th>
+		</tr>
+	</table>
+	<style>
+	body{
+		background-color: #f2f2f2;
+	}
+	#title{
+		font-size: 125%;
+	}
+	#head{
+		height:250px;
+		background-color: #009900;
+	}
+	p{
+		padding-left: 50px;
+		color: white;
+	}
+	img{
+		padding-top:20px;
+		padding-left: 50px;
+	}
+	table{
+		border: 1px solid orange;
+	}
+	td{
+		border: 1px solid black;
+	}
+	th{
+		border: 2px solid green;
+	}
+	</style>
+	<script src="https://cdn.jsdelivr.net/gh/declanmichael7/DrinkDatabase/testArray.js?token=AHREPBBXXLQSHMV36R2HDN26AJ34Y"></script>
+	<script type="text/javascript">
+		alert(drinkArray[0].drinkName);
+		
+		function displayDrinks(){
+			/*var compNum = document.getElementById("compNum").value;
+			var email = document.getElementById("email").value;
+			var match = false;
+			var i=0;
+			while(i<=emailList.length-1 && match==false){
+				console.log(i + "  " + emailList.length);
+				console.log(emailList[i]);
+				if(compNum==emailList[i][0] && email.toLowerCase()==emailList[i][1].toLowerCase()){
+					match = true;
+				}
+				i++;
+			}
+			console.log(match);
+			if(match==true){
+				var table = document.getElementById("results");
+				table.innerHTML = "";
+				var tableHTML = "<table id='results'<tr><th>Competitor Number</th><th>Competition Number</th><th>1st</th><th>2nd</th><th>3rd</th><th>Competitor's Score</th><th>Comments</th></tr></table>";
+				i = 0;
+				while (i < results.length) {
+					if(results[i][0]==compNum){
+						tableHTML += "<tr><td>" + results[i][0] + "</td><td>" + results[i][1] + "</td><td>" + results[i][2] + "</td><td>" + results[i][3] + "</td><td>" + results[i][4] + "</td><td>" + results[i][5] + "</td><td>" + results[i][6] + "</td></tr> ";
+					}
+					i++;
+				}
+				tableHTML += "</table>";
+				table.innerHTML = tableHTML;
+				console.log("test");
+			}
+			else{
+				alert("There is not a competitor number associated with that email. Please verify that you entered your data correctly");
+				document.getElementById("results").innerHTML = "";
+			}*/
+		}
+	</script>
+</body>
+</html>
