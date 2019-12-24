@@ -1,0 +1,119 @@
+<html>
+<head>
+<body>
+	<br>
+	Drink Name: <input type="text" id="drinkName"></input><br><br>
+	Ingredient: <input type="text" id="ingredient"></input><br><br>
+	Search By: <select id="searchBy">
+		<option value="drinkName">Drink Name</option>
+		<option value="ingredient">Ingredient</option>
+	</select><br><br>
+	<button onClick="displayDrinks()">Display Drinks</button><button onClick="addDrink()">Add a Drink</button><br><br>
+	<table id="drinks">
+		<tr>
+			<th>Drink Name</th>
+			<th>Ingredients</th>
+			<th>Notes</th>
+		</tr>
+	</table>
+	<style>
+	body{
+		background-color: #f2f2f2;
+	}
+	#title{
+		font-size: 125%;
+	}
+	#head{
+		height:250px;
+		background-color: #009900;
+	}
+	p{
+		padding-left: 50px;
+		color: white;
+	}
+	img{
+		padding-top:20px;
+		padding-left: 50px;
+	}
+	table{
+		border: 1px solid orange;
+	}
+	td{
+		border: 1px solid black;
+	}
+	th{
+		border: 2px solid green;
+	}
+	</style> 
+	<script type="text/javascript">	
+		if(localStorage.getItem("drinks")!=null){}
+		else{
+			localStorage.setItem("drinks", "Moscow Mule:Dark and Stormy:Mojito");
+			localStorage.setItem("Moscow Mule", "1.5oz Vodka, 0.75oz lime juice, Splash of Ginger Beer;None");
+			localStorage.setItem("Dark and Stormy", "1.5oz Dark Rum, 0.75oz lime juice, Splash of Ginger Beer;None");
+			localStorage.setItem("Mojito", "1.5oz Rum, 0.75oz lime juice, Sugar, Mint, Seltzer;Muddle the sugar and mint together, then pour in the rest");
+		}
+		var drinksArray = localStorage.getItem("drinks").split(":");
+		var i = 0;
+		var searchBy = document.getElementById("searchBy").value;
+		var table = document.getElementById("drinks");
+		var tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th></tr></table>";
+		var str;
+		var misc;
+		while(i<drinksArray.length){
+			str = localStorage.getItem(drinksArray[i]);
+			misc = str.split(";");
+			tableHTML += "<tr><td>"+drinksArray[i]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td></tr>";
+			i++;
+		}
+		tableHTML+="</table>";
+		table.innerHTML = tableHTML;
+		function addDrink(){
+			var drinkName = prompt("Enter Drink Name");
+			var ing = prompt("Enter ingredients");
+			var instr = prompt("Enter any special instructions");
+			var drinkStr = localStorage.getItem("drinks");
+			drinkStr+=":"+drinkName;
+			localStorage.setItem("drinks", drinkStr);
+			ing = ing + ";" + instr;
+			localStorage.setItem(drinkName, ing);
+			drinksArray.push(drinkName);
+			tableHTML = tableHTML.substr(0,87) + "<tr><td>"+drinkName+"</td><td>"+ing+"</td><td>"+instr+"</td></tr>"+tableHTML.substr(88,tableHTML.length);
+			table.innerHTML = tableHTML;
+		}
+		function displayDrinks(){
+			table.innerHTML = "";
+			var tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th></tr>";
+			searchBy = document.getElementById("searchBy").value;
+			if(searchBy == "drinkName"){
+				var drinkName = document.getElementById("drinkName").value.toLowerCase();
+				i=0;
+				var match = false;
+				while(i<drinksArray.length){
+					str = drinksArray[i].toLowerCase();
+					if(str.includes(drinkName)){
+						str = localStorage.getItem(drinksArray[i]);
+						misc = str.split(";");
+						tableHTML+="<tr><td>" + drinksArray[i] + "</td><td>" + misc[0] + "</td><td>" + misc[1]+ "</td></tr>";
+					}
+					i++;
+				}
+				table.innerHTML = tableHTML + "</table>";
+			}
+			else{
+				var ingredient = document.getElementById("ingredient").value.toLowerCase();
+				i=0;
+				while(i<drinksArray.length){
+					if(localStorage.getItem(drinksArray[i]).toLowerCase().includes(ingredient)){
+						str = localStorage.getItem(drinksArray[i]);
+						misc = str.split(";");
+						tableHTML+="<tr><td>" + drinksArray[i] + "</td><td>" + misc[0] + "</td><td>" + misc[1]+ "</td></tr></table>";
+					}
+					i++;
+				}
+				table.innerHTML = tableHTML + "</table>";
+			}
+		}
+	</script>
+</body>
+</html>
