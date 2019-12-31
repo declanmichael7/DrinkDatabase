@@ -17,7 +17,8 @@
 			<th>Remove</th>
 		</tr>
 	</table><br>
-	<button onClick="clearDrinks()">Clear Drink List</button>
+	<button onClick="clearDrinks()">Clear Drink List</button><br><br>
+	<button onClick="copyList()">Copy Drink List</button><button onClick="retrieveList()">Retrieve Drink List</button>
 	<style>
 	body{
 		background-color: #f2f2f2;
@@ -77,7 +78,6 @@
 			var drinkStr = localStorage.getItem("drinks");
 			drinkStr+=":"+drinkName;
 			localStorage.setItem("drinks", drinkStr);
-			ing = ing;
 			localStorage.setItem(drinkName, ing+";"+instr);
 			drinksArray.push(drinkName);
 			tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Remove</th></tr>" + "<tr><td>"+drinkName+"</td><td>"+ing+"</td><td>"+instr+"</td><td><button onClick=\"removeDrink("+(drinksArray.length-1)+")\">Remove Drink</button></td></tr>";
@@ -164,6 +164,59 @@
 			else{
 				alert("Make sure you type in all lowercase");
 			}
+		}
+		function copyList(){
+			var listStr = localStorage.getItem("drinks");
+			var drinkList = listStr.split(":");
+			listStr+="\\";
+			i=0;
+			while(i<drinkList.length){
+				listStr+=localStorage.getItem(drinkList[i]);
+				if(i!==drinkList.length-1){
+					listStr+="%";
+				}
+				i++;
+			}
+			var dummy = document.createElement("textarea");
+			document.body.appendChild(dummy);
+			dummy.value = listStr;
+			dummy.select();
+			document.execCommand("copy");
+			document.body.removeChild(dummy);
+			alert("Copied to clipboard");
+		}
+		function retrieveList(){
+			var listStr = prompt("Paste the string that the program gave you here");
+			var splitIndex = listStr.indexOf("\\");
+			var drinkNames=listStr.substr(0,splitIndex).split(":");
+			var drinkIngredients=listStr.substr(splitIndex+1,9999999999).split("%"); 
+			var i=0;
+			var drinkList = localStorage.getItem("drinks");
+			while(i<drinkNames.length){
+				if(!drinkList.includes(drinkNames[i])){
+					var drinkName = drinkNames[i];
+					var ing = drinkIngredients[i].substr(0,drinkIngredients[i].indexOf(";"));
+					var instr = drinkIngredients[i].substr(drinkIngredients[i].indexOf(";")+1,99999);
+					var drinkStr = localStorage.getItem("drinks");
+					console.log(ing);
+					console.log(instr);
+					drinkStr+=":"+drinkName;
+					localStorage.setItem("drinks", drinkStr);
+					localStorage.setItem(drinkName, ing+";"+instr);
+					drinksArray.push(drinkName);
+				}
+				i++;
+			}
+			tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Remove</th></tr>";
+			i=0;
+			while(i<drinksArray.length){
+				str = localStorage.getItem(drinksArray[i]);
+				misc = str.split(";");
+				tableHTML += "<tr><td>"+drinksArray[i]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
+				i++;
+			}
+			tableHTML+="</table>";
+			table.innerHTML = tableHTML;
 		}
 	</script>
 </body>
