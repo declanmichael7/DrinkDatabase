@@ -8,7 +8,7 @@
 		<option value="drinkName">Drink Name</option>
 		<option value="ingredient">Ingredient</option>
 	</select><br><br>
-	<button onClick="displayDrinks()">Display Drinks</button><button onClick="addDrink()">Add a Drink</button><button onClick="randomDrink()">Random Drink</button><br><br>
+	<button onClick="displayDrinks()">Display Drinks</button><button onClick="addDrink()">Add a Drink</button><button onClick="randomDrink(Math.floor(Math.random() * drinksArray.length))">Random Drink</button><br><br>
 	<table id="drinks">
 		<tr>
 			<th>Drink Name</th>
@@ -63,6 +63,7 @@
 		var tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Remove</th></tr>";
 		var str;
 		var misc;
+		var count =0;
 		while(i<drinksArray.length){
 			str = localStorage.getItem(drinksArray[i]);
 			misc = str.split(";");
@@ -146,14 +147,26 @@
 			tableHTML+="</table>";
 			table.innerHTML = tableHTML;
 		}
-		function randomDrink(){
-			var r = Math.floor(Math.random() * drinksArray.length);
-			tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Remove</th></tr>";
-			str = localStorage.getItem(drinksArray[r]);
-			misc = str.split(";");
-			tableHTML += "<tr><td>"+drinksArray[r]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
-			tableHTML+="</table>";
-			table.innerHTML = tableHTML;
+		function randomDrink(r){
+			console.log(r);
+			if(localStorage.getItem(drinksArray[r]).toLowerCase().includes(document.getElementById("ingredient").value.toLowerCase()) || document.getElementById("ingredient").value==null){
+				tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Remove</th></tr>";
+				str = localStorage.getItem(drinksArray[r]);
+				misc = str.split(";");
+				tableHTML += "<tr><td>"+drinksArray[r]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
+				tableHTML+="</table>";
+				table.innerHTML = tableHTML;
+				count=0;
+			}
+			else{
+				count++;
+				if(count>=30){
+					alert("check ingredient for typos");
+				}
+				else{
+					randomDrink(Math.floor(Math.random() * drinksArray.length));
+				}
+			}
 		}
 		function clearDrinks(){
 			var clear = prompt("Are you sure you want to clear your drinks? Type \"clear\" if so");
