@@ -8,7 +8,7 @@
 		<option value="drinkName">Drink Name</option>
 		<option value="ingredient">Ingredient</option>
 	</select><br><br>
-	<button onClick="displayDrinks()">Display Drinks</button><button onClick="addDrink()">Add a Drink</button><br><br>
+	<button onClick="displayDrinks()">Display Drinks</button><button onClick="addDrink()">Add a Drink</button><button onClick="randomDrink()">Random Drink</button><br><br>
 	<table id="drinks">
 		<tr>
 			<th>Drink Name</th>
@@ -16,7 +16,8 @@
 			<th>Notes</th>
 			<th>Remove</th>
 		</tr>
-	</table>
+	</table><br>
+	<button onClick="clearDrinks()">Clear Drink List</button>
 	<style>
 	body{
 		background-color: #f2f2f2;
@@ -134,7 +135,7 @@
 			else{
 				localStorage.setItem("drinks", str.substr(0, j-1)+str.substr(j+drinkName.length, str.length));
 			}
-			tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Remove</th></tr></table>";
+			tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Remove</th></tr>";
 			i=0;
 			while(i<drinksArray.length){
 				str = localStorage.getItem(drinksArray[i]);
@@ -144,6 +145,25 @@
 			}
 			tableHTML+="</table>";
 			table.innerHTML = tableHTML;
+		}
+		function randomDrink(){
+			var r = Math.floor(Math.random() * drinksArray.length);
+			tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Remove</th></tr>";
+			str = localStorage.getItem(drinksArray[r]);
+			misc = str.split(";");
+			tableHTML += "<tr><td>"+drinksArray[r]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
+			tableHTML+="</table>";
+			table.innerHTML = tableHTML;
+		}
+		function clearDrinks(){
+			var clear = prompt("Are you sure you want to clear your drinks? Type \"clear\" if so");
+			if(clear == "clear"){
+				localStorage.clear();
+				table.innerHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Remove</th></tr></table>";
+			}
+			else{
+				alert("Make sure you type in all lowercase");
+			}
 		}
 	</script>
 </body>
