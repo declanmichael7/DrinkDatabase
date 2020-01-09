@@ -70,19 +70,24 @@
 		drawTable();
 		function addDrink(){
 			var drinkName = prompt("Enter Drink Name");
-			var ing = prompt("Enter ingredients");
-			var instr = prompt("Enter any special instructions");
-			var garnish = prompt("Enter any garnish");
-			var drinkStr = localStorage.getItem("drinks");
-			if(drinkName != null && ing != null && instr!= null && garnish != null){
-				drinkStr+=":"+drinkName;
-				localStorage.setItem("drinks", drinkStr);
-				localStorage.setItem(drinkName, ing+";"+instr+";"+garnish);
-				drinksArray.push(drinkName);
-				drawTable(drinksArray.length-1);
+			if(drinksArray.includes(drinkName)){
+				alert("A drink with that name already exists");
 			}
 			else{
-				alert("Please do not leave inputs empty");
+				var ing = prompt("Enter ingredients");
+				var instr = prompt("Enter any special instructions");
+				var garnish = prompt("Enter any garnish");
+				var drinkStr = localStorage.getItem("drinks");
+				if(drinkName != null && ing != null && instr!= null && garnish != null){
+					drinkStr+=":"+drinkName;
+					localStorage.setItem("drinks", drinkStr);
+					localStorage.setItem(drinkName, ing+";"+instr+";"+garnish);
+					drinksArray.push(drinkName);
+					drawTable(drinksArray.length-1);
+				}
+				else{
+					alert("Please do not leave inputs empty");
+				}
 			}
 		}
 		function displayDrinks(){
