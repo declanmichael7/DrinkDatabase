@@ -64,18 +64,11 @@
 		var i = 0;
 		var searchBy = document.getElementById("searchBy").value;
 		var table = document.getElementById("drinks");
-		var tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Garnish</th><th>Remove</th></tr>";
+		var tableHTML;
 		var str;
 		var misc;
 		var count =0;
-		while(i<drinksArray.length){
-			str = localStorage.getItem(drinksArray[i]);
-			misc = str.split(";");
-			tableHTML += "<tr><td>"+drinksArray[i]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td>"+misc[2]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
-			i++;
-		}
-		tableHTML+="</table>";
-		table.innerHTML = tableHTML;
+		drawTable();
 		function addDrink(){
 			var drinkName = prompt("Enter Drink Name");
 			var ing = prompt("Enter ingredients");
@@ -87,15 +80,7 @@
 				localStorage.setItem("drinks", drinkStr);
 				localStorage.setItem(drinkName, ing+";"+instr+";"+garnish);
 				drinksArray.push(drinkName);
-				tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Garnish</th><th>Remove</th></tr>" + "<tr><td>"+drinkName+"</td><td>"+ing+"</td><td>"+instr+"</td><td>"+garnish+"</td><td><button onClick=\"removeDrink("+(drinksArray.length-1)+")\">Remove Drink</button></td></tr>";
-				i=0;
-				while(i<drinksArray.length-1){
-					str = localStorage.getItem(drinksArray[i]);
-					misc = str.split(";");
-					tableHTML += "<tr><td>"+drinksArray[i]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td>"+misc[2]+"<td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
-					i++;
-				}
-				table.innerHTML = tableHTML;
+				drawTable(drinksArray.length-1);
 			}
 			else{
 				alert("Please do not leave inputs empty");
@@ -103,12 +88,11 @@
 		}
 		function displayDrinks(){
 			table.innerHTML = "";
-			var tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Garnish</td><th>Remove</th></tr>";
+			tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Garnish</td><th>Remove</th></tr>";
 			searchBy = document.getElementById("searchBy").value;
 			if(searchBy == "drinkName"){
 				var drinkName = document.getElementById("drinkName").value.toLowerCase();
 				i=0;
-				var match = false;
 				while(i<drinksArray.length){
 					str = drinksArray[i].toLowerCase();
 					if(str.includes(drinkName)){
@@ -127,7 +111,7 @@
 					if(localStorage.getItem(drinksArray[i]).toLowerCase().includes(ingredient)){
 						str = localStorage.getItem(drinksArray[i]);
 						misc = str.split(";");
-						tableHTML+="<tr><td>" + drinksArray[i] + "</td><td>" + misc[0] + "</td><td>" + misc[1]+ "</td><td>"+misc[2]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</button></td></tr></table>";
+						tableHTML += "<tr><td>"+drinksArray[i]+"</td><td onclick=\'editField("+i+","+0+")\'>"+misc[0]+"</td><td onclick=\'editField("+i+","+1+")\'>"+misc[1]+"</td><td onclick=\'editField("+i+","+2+")\'>"+misc[2]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
 					}
 					i++;
 				}
@@ -148,28 +132,18 @@
 				else{
 					localStorage.setItem("drinks", str.substr(0, j-1)+str.substr(j+drinkName.length, str.length));
 				}
-				tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Garnish</th><th>Remove</th></tr>";
-				i=0;
-				while(i<drinksArray.length){
-					str = localStorage.getItem(drinksArray[i]);
-					misc = str.split(";");
-					tableHTML += "<tr><td>"+drinksArray[i]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td>"+misc[2]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
-					i++;
-				}
-				tableHTML+="</table>";
-				table.innerHTML = tableHTML;
+				drawTable();
 			}
 			else{
 				alert("The drink was not removed");
 			}
 		}
 		function randomDrink(r){
-			console.log(r);
 			if(localStorage.getItem(drinksArray[r]).toLowerCase().includes(document.getElementById("ingredient").value.toLowerCase()) || document.getElementById("ingredient").value==null){
 				tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Garnish</th><th>Remove</th></tr>";
 				str = localStorage.getItem(drinksArray[r]);
 				misc = str.split(";");
-				tableHTML += "<tr><td>"+drinksArray[r]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td>"+misc[2]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
+				tableHTML += "<tr><td>"+drinksArray[r]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td>"+misc[2]+"<td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
 				tableHTML+="</table>";
 				table.innerHTML = tableHTML;
 				count=0;
@@ -228,9 +202,6 @@
 					var instr = drinkIngredients[i].substr(drinkIngredients[i].indexOf(";")+1,drinkIngredients[i].indexOf(";", drinkIngredients[i].indexOf(";")));
 					var garnish = drinkIngredients[i].substr(drinkIngredients[i].indexOf(";", drinkIngredients[i].indexOf(";")+1)+1,9999999);
 					var drinkStr = localStorage.getItem("drinks");
-					console.log(ing);
-					console.log(instr);
-					console.log(garnish);
 					drinkStr+=":"+drinkName;
 					localStorage.setItem("drinks", drinkStr);
 					localStorage.setItem(drinkName, ing+";"+instr+";"+garnish);
@@ -238,16 +209,46 @@
 				}
 				i++;
 			}
-			tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Garnish</th><th>Remove</th></tr>";
+			drawTable();
+		}
+		function drawTable(j){
 			i=0;
-			while(i<drinksArray.length){
-				str = localStorage.getItem(drinksArray[i]);
+			tableHTML = "";
+			tableHTML = "<table id='drinks'<tr><th>Drink Name</th><th>Ingredients</th><th>Notes</th><th>Garnish</th><th>Remove</th></tr>";
+			if(j!=undefined){
+				str = localStorage.getItem(drinksArray[j]);
 				misc = str.split(";");
-				tableHTML += "<tr><td>"+drinksArray[i]+"</td><td>"+misc[0]+"</td><td>"+misc[1]+"</td><td>"+misc[2]+"<td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
-				i++;
+				tableHTML += "<tr><td>"+drinksArray[j]+"</td><td onclick=\'editField("+i+","+0+")\'>"+misc[0]+"</td><td onclick=\'editField("+i+","+1+")\'>"+misc[1]+"</td><td onclick=\'editField("+i+","+2+")\'>"+misc[2]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
+			}
+			while(i<drinksArray.length){
+				if(j==i){
+					i++;
+				}
+				else{
+					str = localStorage.getItem(drinksArray[i]);
+					misc = str.split(";");
+					tableHTML += "<tr><td>"+drinksArray[i]+"</td><td onclick=\'editField("+i+","+0+")\'>"+misc[0]+"</td><td onclick=\'editField("+i+","+1+")\'>"+misc[1]+"</td><td onclick=\'editField("+i+","+2+")\'>"+misc[2]+"</td><td><button onClick=\"removeDrink("+i+")\">Remove Drink</th></tr>";
+					i++;
+				}
 			}
 			tableHTML+="</table>";
 			table.innerHTML = tableHTML;
+		}
+		function editField(s,i){
+			var list = localStorage.getItem(drinksArray[s]).split(";");
+			if(i==0){
+				var ing = prompt("What would you like to change the ingredient to?");
+				localStorage.setItem(drinksArray[s], ing + ";" + list[1] + ";" + list[2]);
+			}
+			else if(i==1){
+				var notes = prompt("What would you like to change the notes to?");
+				localStorage.setItem(drinksArray[s], list[0] + ";" + notes + ";" + list[2]);
+			}
+			else if(i==2){
+				var gar = prompt("What would you like to change the garnish to?");
+				localStorage.setItem(drinksArray[s], list[0] + ";" + list[1] + ";" + gar);
+			}
+			drawTable();
 		}
 	</script>
 </body>
